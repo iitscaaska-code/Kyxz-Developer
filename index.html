@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portafolio Developer</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    /* --- VARIABLES & RESET --- */
+    :root {
+      --bg-dark: #0a0a0c;
+      --bg-card: #121216;
+      --accent-red: #e63946;
+      --accent-red-glow: rgba(230, 57, 70, 0.25);
+      --text-main: #f1f1f1;
+      --text-muted: #a0a0ab;
+      --border-color: #22222a;
+      --sidebar-width: 260px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* --- SIDEBAR --- */
+    aside {
+      width: var(--sidebar-width);
+      background: #0d0d11;
+      border-right: 1px solid var(--border-color);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      z-index: 10;
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .avatar-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent-red);
+      box-shadow: 0 0 15px var(--accent-red-glow);
+      margin-bottom: 1rem;
+    }
+
+    .dev-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .dev-role {
+      font-size: 0.85rem;
+      color: var(--accent-red);
+      margin-top: 4px;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: rgba(230, 57, 70, 0.15);
+      color: var(--accent-red);
+      border-left: 3px solid var(--accent-red);
+    }
+
+    /* --- CONTENIDO PRINCIPAL --- */
+    main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      padding: 3rem;
+      max-width: 1000px;
+    }
+
+    .section {
+      display: none;
+      animation: fadeIn 0.4s ease-in-out forwards;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+
+    /* --- TARJETAS Y GRID --- */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 3px;
+      background: var(--accent-red);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent-red);
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    /* --- BARRAS DE HABILIDADES --- */
+    .skill-item {
+      margin-bottom: 1.2rem;
+    }
+
+    .skill-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .skill-bar {
+      width: 100%;
+      height: 8px;
+      background: #1e1e26;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .skill-progress {
+      height: 100%;
+      background: var(--accent-red);
+      border-radius: 4px;
+      box-shadow: 0 0 10px var(--accent-red-glow);
+    }
+
+    /* --- GRID DE PROYECTOS / SERVICIOS --- */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      background: rgba(230, 57, 70, 0.2);
+      color: var(--accent-red);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    /* --- FAQ ACORDEÓN --- */
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-answer {
+      padding: 0 1.2rem 1.2rem 1.2rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 768px) {
+      body { flex-direction: column; }
+      aside { width: 100%; height: auto; position: relative; }
+      main { margin-left: 0; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA LATERAL -->
+  <aside>
+    <div class="profile-header">
+      <!-- Cambia la URL de la imagen por la foto que quieras -->
+      <img src="https://via.placeholder.com/150" alt="Foto de Perfil" class="avatar-img" />
+      <h2 class="dev-name">TuNombre</h2>
+      <p class="dev-role">Developer & Systems Specialist</p>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="#bienvenida" class="active" onclick="switchTab('bienvenida', this)"><i class="fa-solid fa-house"></i> Bienvenida</a></li>
+      <li><a href="#info" onclick="switchTab('info', this)"><i class="fa-solid fa-user"></i> Información General</a></li>
+      <li><a href="#habilidades" onclick="switchTab('habilidades', this)"><i class="fa-solid fa-code"></i> Habilidades</a></li>
+      <li><a href="#servicios" onclick="switchTab('servicios', this)"><i class="fa-solid fa-cubes"></i> Servicios</a></li>
+      <li><a href="#trayectoria" onclick="switchTab('trayectoria', this)"><i class="fa-solid fa-server"></i> Trayectoria</a></li>
+      <li><a href="#faq" onclick="switchTab('faq', this)"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+      <li><a href="#contacto" onclick="switchTab('contacto', this)"><i class="fa-solid fa-envelope"></i> Contacto</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main>
+
+    <!-- INICIO / BIENVENIDA -->
+    <section id="bienvenida" class="section active">
+      <div class="card" style="text-align: center; padding: 3rem 1.5rem;">
+        <h1 style="font-size: 2.2rem; margin-bottom: 1rem;">Desarrollo Backend & Bots de Discord</h1>
+        <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 2rem auto;">
+          Especializado en la creación de bots de Discord personalizados, plugins de Minecraft y sistemas automatizados para servidores de gran escala.
+        </p>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">3+</div>
+            <div class="stat-label">Años de Experiencia</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">15+</div>
+            <div class="stat-label">Bots & Plugins Desarrollados</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INFORMACIÓN GENERAL -->
+    <section id="info" class="section">
+      <h2 class="section-title">Información General</h2>
+      <p class="section-subtitle">¿Quién soy y cómo trabajo?</p>
+      
+      <div class="card">
+        <h3 style="margin-bottom: 0.8rem; color: var(--accent-red);">Mi Enfoque</h3>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+          Me dedico a crear soluciones eficaces en Python y Java. Desde bots con comandos Slash e integraciones web hasta sistemas complejos de tickets y sincronización de datos para comunidades de videojuegos.
+        </p>
+      </div>
+    </section>
+
+    <!-- HABILIDADES -->
+    <section id="habilidades" class="section">
+      <h2 class="section-title">Habilidades Técnicas</h2>
+      <p class="section-subtitle">Nivel de dominio tecnológico</p>
+
+      <div class="card">
+        <div class="skill-item">
+          <div class="skill-info"><span>Python (discord.py / Async)</span><span>90%</span></div>
+          <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-info"><span>Desarrollo de Bots de Discord</span><span>95%</span></div>
+          <div class="skill-bar"><div class="skill-progress" style="width: 95%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-info"><span>Java / Minecraft API</span><span>80%</span></div>
+          <div class="skill-bar"><div class="skill-progress" style="width: 80%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-info"><span>Gestión de Bases de Datos & Hosting (Discloud)</span><span>85%</span></div>
+          <div class="skill-bar"><div class="skill-progress" style="width: 85%;"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section id="servicios" class="section">
+      <h2 class="section-title">Servicios</h2>
+      <p class="section-subtitle">Lo que puedo desarrollar para tu proyecto</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <i class="fa-brands fa-discord" style="font-size: 2rem; color: var(--accent-red); margin-bottom: 1rem;"></i>
+          <h3>Bots de Discord Custom</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Sistemas de tickets, moderación automática, integración con APIs externas (TikTok Live, YouTube, etc.).</p>
+        </div>
+        <div class="card">
+          <i class="fa-solid fa-gamepad" style="font-size: 2rem; color: var(--accent-red); margin-bottom: 1rem;"></i>
+          <h3>Configuración de Servidores</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Optimización de servidores de Minecraft, proxies y vinculación de roles con Discord.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRAYECTORIA -->
+    <section id="trayectoria" class="section">
+      <h2 class="section-title">Trayectoria</h2>
+      <p class="section-subtitle">Proyectos y servidores en los que he colaborado</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Obsidian Tierlist Bot</h3>
+          <span class="badge">DEVELOPER</span>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.8rem;">Sistema de rankings PvP totalmente administrado desde Discord.</p>
+        </div>
+        <div class="card">
+          <h3>Virex Network</h3>
+          <span class="badge">DEV & SYSADMIN</span>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.8rem;">Configuración de proxies y despliegue de infraestructura.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PREGUNTAS FRECUENTES (FAQ) -->
+    <section id="faq" class="section">
+      <h2 class="section-title">Preguntas Frecuentes</h2>
+      <p class="section-subtitle">Resuelve tus dudas antes de contratar</p>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">¿Con qué tamaño de proyecto/servidor trabajas? <i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-answer">Trabajo tanto con proyectos pequeños que están iniciando como con redes de servidores consolidadas con miles de usuarios.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">¿Dónde alojas o despliegas los bots? <i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-answer">Utilizo principalmente plataformas como Discloud, VPS Linux o hosting dedicado según los requerimientos del cliente.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">¿Ofreces soporte post-entrega? <i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-answer">Sí, todos los proyectos incluyen periodo de garantía para corregir errores sin costo adicional.</div>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto" class="section">
+      <h2 class="section-title">Contacto</h2>
+      <p class="section-subtitle">Hablemos para iniciar tu proyecto</p>
+
+      <div class="card" style="display: flex; gap: 2rem; align-items: center;">
+        <i class="fa-brands fa-discord" style="font-size: 3rem; color: var(--accent-red);"></i>
+        <div>
+          <h3>Discord Directo</h3>
+          <p style="color: var(--text-muted); margin-top: 0.2rem;">Agrégame para consultar cotizaciones:</p>
+          <code style="background: #000; padding: 0.4rem 0.8rem; border-radius: 4px; color: var(--accent-red); font-weight: bold; display: inline-block; margin-top: 0.5rem;">TuUsuario#0000</code>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    function switchTab(sectionId, element) {
+      // Ocultar todas las secciones
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      
+      // Desactivar todos los links
+      document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
+
+      // Mostrar la sección seleccionada y activar su link
+      document.getElementById(sectionId).classList.add('active');
+      element.classList.add('active');
+    }
+
+    function toggleFaq(element) {
+      element.classList.toggle('active');
+    }
+  </script>
+</body>
+</html>
